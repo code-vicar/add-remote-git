@@ -1,13 +1,13 @@
 {
   "name": "add-remote-git",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Download git projects using 'git urls', like npm does",
+  "main": "add-remote-git.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Scott Vickers",
+  "license": "MIT",
   "dependencies": {
     "chownr": "^1.0.1",
     "dezalgo": "^1.0.3",
