@@ -1,3 +1,5 @@
+// ** MODIFIED FROM https://github.com/npm/npm/blob/d081cc6c8d73f2aa698aab36605377c95e916224/lib/cache/add-remote-git.js
+
 var assert = require('assert')
 var fs = require('graceful-fs')
 var path = require('path')
