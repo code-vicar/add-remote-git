@@ -11,6 +11,7 @@
   "dependencies": {
     "chownr": "^1.0.1",
     "dezalgo": "^1.0.3",
+    "fs-extra": "^1.0.0",
     "graceful-fs": "^4.1.11",
     "hosted-git-info": "^2.1.5",
     "inflight": "^1.0.6",

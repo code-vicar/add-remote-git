@@ -2,6 +2,8 @@
 var uniqueFilename = require('unique-filename')
 var path = require('path')
 
-module.exports = function (prefix) {
-  return uniqueFilename(path.resolve(__dirname, '..', '_tmp'), prefix)
+module.exports = function(tmpDir) {
+    return function (prefix) {
+        return uniqueFilename(tmpDir, prefix)
+    }
 }

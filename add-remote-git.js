@@ -2,6 +2,7 @@
 
 var assert = require('assert')
 var fs = require('graceful-fs')
+var fse = require('fs-extra')
 var path = require('path')
 var url = require('url')
 
@@ -17,7 +18,9 @@ var uniqueFilename = require('unique-filename')
 
 var correctMkdir = require('./utils/correct-mkdir.js')
 var git = require('./utils/git.js')
-var tempFilename = require('./utils/temp-filename.js')
+
+var tmpDir = path.resolve(__dirname, '_tmp')
+var tempFilename = require('./utils/temp-filename.js')(tmpDir)
 
 var remotes = path.resolve(__dirname, '_git-remotes')
 var templates = path.join(remotes, '_templates')
@@ -39,11 +42,37 @@ var FS_MODES = {
   umask: umask
 }
 
-module.exports = addRemoteGit
-function addRemoteGit (uri, _cb) {
+module.exports.clearCache = clearCache
+function clearCache(cb) {
+    rmTmpDir(function(err) {
+        if (err) {
+            return cb(err)
+        }
+        rmRemotes(cb)
+    })
+}
+
+function rmRemotes(cb) {
+    fse.remove(remotes, cb)
+}
+
+function rmTmpDir(cb) {
+    fse.remove(tmpDir, cb)
+}
+
+module.exports.download = addRemoteGit
+function addRemoteGit (uri, options, _cb) {
   assert(typeof uri === 'string', 'must have git URL')
+  if (typeof options === 'function') {
+      _cb = options
+  }
   assert(typeof _cb === 'function', 'must have callback')
   var cb = dezalgo(_cb)
+
+  log.level = 'silent' // default to silent
+  if (options && options.logLevel) {
+      log.level = options.logLevel
+  }
 
   log.verbose('addRemoteGit', 'caching', uri)
 
@@ -369,7 +398,7 @@ function updateSubmodules (from, resolvedURL, tmpdir, cb) {
         return cb(er)
       }
       log.verbose('updateSubmodules', from, 'submodule update', stdout)
-      cb({
+      cb(null, {
         from: from,
         resolvedURL: resolvedURL,
         tmpdir: tmpdir
